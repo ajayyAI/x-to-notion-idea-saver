@@ -10,10 +10,9 @@ The extension lets a user save selected X posts to the user's own Notion databas
 ## Data the extension handles
 When you click `Save idea`, the extension processes:
 - Post URL
-- Post text (if available)
-- Author handle/name (if available)
 - Post timestamp (if available)
 - Save timestamp
+- Post ID-derived title string
 
 It also stores extension settings:
 - Notion integration token

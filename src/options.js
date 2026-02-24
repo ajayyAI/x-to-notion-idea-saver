@@ -164,7 +164,7 @@
         schemaBadge.textContent = "Schema usable";
         schemaBadge.dataset.tone = "warning";
         setStatus(
-          `Connected to "${response.databaseTitle}". Saves will work, but optional fields need cleanup.`,
+          `Connected to "${response.databaseTitle}". Saves will work. Add optional Posted At if you want timestamp context.`,
           "warning"
         );
         return;

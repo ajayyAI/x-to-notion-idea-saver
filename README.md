@@ -5,7 +5,7 @@ Production-grade Chrome extension (Manifest V3) for capturing X post ideas direc
 ## Core behavior
 
 - Injects a resilient `Save idea` action onto X posts
-- Saves post URL + metadata to Notion with one click
+- Saves only key post details to Notion with one click
 - Prevents duplicates by canonical post URL
 - Handles repeated rapid clicks with in-flight dedupe locks
 - Maps common Notion errors into clear UX messages
@@ -28,10 +28,7 @@ Production-grade Chrome extension (Manifest V3) for capturing X post ideas direc
 
 ### Optional (recommended)
 
-- `Author` (rich_text)
-- `Content` (rich_text)
 - `Posted At` (date)
-- `Source` (select)
 
 ## Security model
 

@@ -125,16 +125,10 @@ function validateIncomingPost(post) {
     };
   }
 
-  const authorHandle = CORE.normalizeWhitespace(post?.authorHandle || "");
-  const authorFromUrl = CORE.extractHandleFromPostUrl(postUrl) || "";
-
   return {
     ok: true,
     postId: statusId,
     postUrl,
-    authorHandle: authorHandle || authorFromUrl,
-    authorName: CORE.normalizeWhitespace(post?.authorName || ""),
-    text: CORE.normalizeWhitespace(post?.text || ""),
     postedAt: CORE.normalizeISODate(post?.postedAt || ""),
     savedAt: CORE.normalizeISODate(post?.savedAt || "") || new Date().toISOString()
   };
@@ -286,14 +280,13 @@ async function findExistingByPostUrl(notionToken, databaseId, postUrl) {
 
 async function createPostPage(notionToken, databaseId, post, databaseProperties) {
   const properties = {};
-  const authorLabel = CORE.buildAuthorLabel(post.authorHandle, post.authorName);
 
   if (databaseProperties.Title?.type === "title") {
     properties.Title = {
       title: [
         {
           text: {
-            content: CORE.buildTitle(post.text, post.authorHandle)
+            content: CORE.buildMinimalTitle(post.postId)
           }
         }
       ]
@@ -312,42 +305,10 @@ async function createPostPage(notionToken, databaseId, post, databaseProperties)
     };
   }
 
-  if (authorLabel && databaseProperties.Author?.type === "rich_text") {
-    properties.Author = {
-      rich_text: [
-        {
-          text: {
-            content: CORE.truncate(authorLabel, 1800)
-          }
-        }
-      ]
-    };
-  }
-
-  if (post.text && databaseProperties.Content?.type === "rich_text") {
-    properties.Content = {
-      rich_text: [
-        {
-          text: {
-            content: CORE.truncate(post.text, 1800)
-          }
-        }
-      ]
-    };
-  }
-
   if (post.postedAt && databaseProperties["Posted At"]?.type === "date") {
     properties["Posted At"] = {
       date: {
         start: post.postedAt
-      }
-    };
-  }
-
-  if (databaseProperties.Source?.type === "select") {
-    properties.Source = {
-      select: {
-        name: "X"
       }
     };
   }

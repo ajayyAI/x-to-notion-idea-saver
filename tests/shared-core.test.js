@@ -48,6 +48,11 @@ test("buildCanonicalPostUrl chooses handle format when available", () => {
   assert.equal(core.buildCanonicalPostUrl("", "naval"), null);
 });
 
+test("buildMinimalTitle uses statusId when available", () => {
+  assert.equal(core.buildMinimalTitle("1938273648273648"), "X post 1938273648273648");
+  assert.equal(core.buildMinimalTitle(""), "Saved X post");
+});
+
 test("normalizeDatabaseId accepts raw IDs and notion URLs", () => {
   assert.equal(
     core.normalizeDatabaseId("12345678123412341234123456789abc"),
@@ -82,14 +87,13 @@ test("evaluateDatabaseSchema detects missing and mismatched properties", () => {
   const result = core.evaluateDatabaseSchema({
     Title: { type: "title" },
     "Post URL": { type: "rich_text" },
-    "Saved At": { type: "date" },
-    Source: { type: "multi_select" }
+    "Saved At": { type: "date" }
   });
 
   assert.deepEqual(result.missingRequired, []);
-  assert.deepEqual(result.missingOptional, ["Author", "Content", "Posted At"]);
+  assert.deepEqual(result.missingOptional, ["Posted At"]);
   assert.deepEqual(result.mismatchedRequired, [{ name: "Post URL", expected: "url", actual: "rich_text" }]);
-  assert.deepEqual(result.mismatchedOptional, [{ name: "Source", expected: "select", actual: "multi_select" }]);
+  assert.deepEqual(result.mismatchedOptional, []);
   assert.equal(result.isWriteSafe, false);
 });
 

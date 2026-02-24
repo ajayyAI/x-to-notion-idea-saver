@@ -12,8 +12,6 @@
   const SELECTORS = {
     article: "article",
     actionGroup: 'div[role="group"]',
-    text: 'div[data-testid="tweetText"]',
-    userName: 'div[data-testid="User-Name"]',
     statusLink: 'a[href*="/status/"]'
   };
 
@@ -120,9 +118,8 @@
       button.type = "button";
       button.className = "x2n-save-button";
       button.dataset.state = "idle";
-      button.setAttribute("aria-label", "Save post idea to Notion");
-      button.innerHTML =
-        '<span class="x2n-save-icon" aria-hidden="true">+</span><span class="x2n-save-label">Save idea</span>';
+      button.setAttribute("aria-label", "Save post to Notion");
+      button.innerHTML = '<span class="x2n-save-icon" aria-hidden="true">🔖</span>';
 
       wrapper.appendChild(button);
       actionGroup.appendChild(wrapper);
@@ -242,17 +239,11 @@
       return null;
     }
 
-    const authorHandle = extractAuthorHandle(article) || CORE.extractHandleFromPostUrl(postUrl) || "";
-    const authorName = extractAuthorName(article);
-    const text = extractPrimaryPostText(article);
     const postedAt = CORE.normalizeISODate(extractPostDatetime(article) || "");
 
     return {
       postId,
       postUrl,
-      authorHandle,
-      authorName,
-      text,
       postedAt,
       savedAt: new Date().toISOString()
     };
@@ -293,86 +284,31 @@
     return timeElement.getAttribute("datetime") || "";
   }
 
-  function extractPrimaryPostText(article) {
-    const textNodes = Array.from(article.querySelectorAll(SELECTORS.text));
-    if (textNodes.length === 0) {
-      return "";
-    }
-
-    let bestNode = textNodes[0];
-    let bestDepth = depthFromAncestor(article, bestNode);
-
-    for (let index = 1; index < textNodes.length; index += 1) {
-      const candidate = textNodes[index];
-      const depth = depthFromAncestor(article, candidate);
-      if (depth < bestDepth) {
-        bestNode = candidate;
-        bestDepth = depth;
-      }
-    }
-
-    return CORE.normalizeWhitespace(bestNode.innerText || "");
-  }
-
-  function depthFromAncestor(ancestor, node) {
-    let depth = 0;
-    let current = node;
-    while (current && current !== ancestor) {
-      depth += 1;
-      current = current.parentElement;
-    }
-    return depth;
-  }
-
-  function extractAuthorHandle(article) {
-    const userNameBlock = article.querySelector(SELECTORS.userName);
-    if (!userNameBlock) {
-      return "";
-    }
-
-    const profileLinks = userNameBlock.querySelectorAll('a[href^="/"]');
-    for (const link of profileLinks) {
-      const href = link.getAttribute("href");
-      if (!href || href.includes("/status/")) {
-        continue;
-      }
-      const match = href.match(/^\/([A-Za-z0-9_]{1,15})$/);
-      if (match) {
-        return match[1];
-      }
-    }
-
-    return "";
-  }
-
-  function extractAuthorName(article) {
-    const userNameBlock = article.querySelector(SELECTORS.userName);
-    if (!userNameBlock) {
-      return "";
-    }
-
-    const spans = userNameBlock.querySelectorAll("span");
-    for (const span of spans) {
-      const value = CORE.normalizeWhitespace(span.textContent || "");
-      if (!value || value.startsWith("@")) {
-        continue;
-      }
-      return value;
-    }
-    return "";
-  }
-
   function setButtonState(button, state, label) {
     button.dataset.state = state;
 
-    const labelNode = button.querySelector(".x2n-save-label");
-    if (labelNode) {
-      labelNode.textContent = label;
-    } else {
-      button.textContent = label;
+    const iconNode = button.querySelector(".x2n-save-icon");
+    if (iconNode) {
+      iconNode.textContent = getStateIcon(state);
     }
+    button.setAttribute("aria-label", `Notion save status: ${label}`);
 
     button.disabled = state === "saving";
+  }
+
+  function getStateIcon(state) {
+    switch (state) {
+      case "saving":
+        return "⏳";
+      case "saved":
+        return "✅";
+      case "already":
+        return "☑️";
+      case "error":
+        return "⚠️";
+      default:
+        return "🔖";
+    }
   }
 
   async function bootstrapSettings() {

@@ -18,7 +18,7 @@ No other local browser data is accessed.
 ### `https://x.com/*`
 Required to:
 - Render the `Save idea` button inside X post UI
-- Read selected post content (URL/text/author/time) after explicit user click
+- Read selected post details (URL and timestamp) after explicit user click
 
 The extension does not scrape unrelated pages outside x.com.
 

@@ -34,20 +34,22 @@
 .x2n-save-button {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   border: 1px solid var(--x2n-border);
   background: var(--x2n-surface);
   color: var(--x2n-text);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   line-height: 1;
   font-family: var(--x2n-font);
   border-radius: 999px;
-  padding: 6px 12px 6px 9px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 150ms ease, border-color 150ms ease, color 150ms ease,
     background 150ms ease;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.16);
+  justify-content: center;
 }
 
 .x2n-save-button:hover {
@@ -68,20 +70,15 @@
 }
 
 .x2n-save-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
   font-size: 12px;
-  background: color-mix(in srgb, var(--x2n-primary) 15%, transparent);
-  color: var(--x2n-primary);
+  line-height: 1;
 }
 
 .x2n-save-button[data-state="saving"] .x2n-save-icon {
-  animation: x2n-spin 700ms linear infinite;
+  animation: x2n-pulse 700ms ease infinite;
 }
 
 .x2n-save-button[data-state="saved"] {
@@ -90,8 +87,7 @@
 }
 
 .x2n-save-button[data-state="saved"] .x2n-save-icon {
-  color: var(--x2n-success);
-  background: color-mix(in srgb, var(--x2n-success) 18%, transparent);
+  filter: saturate(1.1);
 }
 
 .x2n-save-button[data-state="already"] {
@@ -100,8 +96,7 @@
 }
 
 .x2n-save-button[data-state="already"] .x2n-save-icon {
-  color: var(--x2n-warn);
-  background: color-mix(in srgb, var(--x2n-warn) 18%, transparent);
+  filter: saturate(1.1);
 }
 
 .x2n-save-button[data-state="error"] {
@@ -110,8 +105,7 @@
 }
 
 .x2n-save-button[data-state="error"] .x2n-save-icon {
-  color: var(--x2n-danger);
-  background: color-mix(in srgb, var(--x2n-danger) 18%, transparent);
+  filter: saturate(1.1);
 }
 
 .x2n-toast {
@@ -150,11 +144,13 @@
   background: linear-gradient(135deg, #1b70ea 0%, #1455b9 100%);
 }
 
-@keyframes x2n-spin {
+@keyframes x2n-pulse {
   from {
-    transform: rotate(0deg);
+    transform: scale(0.94);
+    opacity: 0.85;
   }
   to {
-    transform: rotate(360deg);
+    transform: scale(1.06);
+    opacity: 1;
   }
 }

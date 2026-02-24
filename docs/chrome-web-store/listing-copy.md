@@ -9,14 +9,13 @@ Save high-signal X posts to your Notion ideas database in one click, with duplic
 ## Detailed Description
 Capture viral post ideas from X without breaking your flow.
 
-X to Notion Idea Saver adds a lightweight `Save idea` action directly on posts in `x.com`. Click once and the post is written to your Notion database with metadata that is useful for research and later filtering.
+X to Notion Idea Saver adds a lightweight `Save idea` action directly on posts in `x.com`. Click once and the post is written to your Notion database with only the most important fields.
 
 ### What it does
 - Adds an in-feed save action on X posts
 - Saves to your Notion database with:
+  - Auto-generated title from post ID
   - Canonical post URL
-  - Author handle and name (when available)
-  - Post text
   - Original post timestamp (when available)
   - Save timestamp
 - Prevents duplicates by checking post URL before insert
@@ -40,10 +39,7 @@ Required Notion properties:
 - `Saved At` (date)
 
 Optional properties:
-- `Author` (rich_text)
-- `Content` (rich_text)
 - `Posted At` (date)
-- `Source` (select)
 
 ## Single Purpose Statement
 This extension helps users save selected X posts into their own Notion database for idea capture and research.

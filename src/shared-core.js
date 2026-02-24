@@ -23,10 +23,7 @@
   };
 
   const OPTIONAL_DATABASE_SCHEMA = {
-    Author: "rich_text",
-    Content: "rich_text",
-    "Posted At": "date",
-    Source: "select"
+    "Posted At": "date"
   };
 
   function normalizeWhitespace(input) {
@@ -201,6 +198,14 @@
     return name;
   }
 
+  function buildMinimalTitle(statusId) {
+    const value = normalizeWhitespace(statusId);
+    if (/^\d{5,}$/.test(value)) {
+      return `X post ${value}`;
+    }
+    return "Saved X post";
+  }
+
   function evaluateDatabaseSchema(properties) {
     const safeProperties = properties && typeof properties === "object" ? properties : {};
 
@@ -262,6 +267,7 @@
     isLikelyNotionToken,
     buildTitle,
     buildAuthorLabel,
+    buildMinimalTitle,
     evaluateDatabaseSchema
   };
 });
